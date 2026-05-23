@@ -9,7 +9,7 @@ pipeline {
 
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/prats00017/trend-devops-project.git'
+                git branch: 'main', url: 'https://github.com/prats00017/trend-devops-project.git'
             }
         }
 
