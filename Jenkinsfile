@@ -15,11 +15,11 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $DOCKER_IMAGE:latest .'
+                sh 'docker build -t $DOCKER_IMAGE .'
             }
         }
 
-        stage('Docker Login') {
+        stage('DockerHub Login') {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'dockerhub-creds',
@@ -34,7 +34,7 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                sh 'docker push $DOCKER_IMAGE:latest'
+                sh 'docker push $DOCKER_IMAGE'
             }
         }
 
@@ -43,7 +43,8 @@ pipeline {
                 sh '''
                 docker stop trend-container || true
                 docker rm trend-container || true
-                docker run -d -p 80:80 --name trend-container $DOCKER_IMAGE:latest
+
+                docker run -d --name trend-container -p 80:80 $DOCKER_IMAGE
                 '''
             }
         }
